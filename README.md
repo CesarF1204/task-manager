@@ -60,7 +60,6 @@ Data is stored in `localStorage` under `task-manager-state`.
 └── js/
     ├── app.js
     ├── components/
-    │   ├── avatar.js
     │   ├── icons.js
     │   ├── modals.js
     │   └── toast.js

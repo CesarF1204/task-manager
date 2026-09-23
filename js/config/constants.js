@@ -14,9 +14,6 @@ export const MAX_TASK_TITLE_LENGTH = 120;
 export const TOAST_DURATION_MS = 4200;
 export const TASK_ANIMATION_MS = 220;
 
-export const USER_INITIALS = "TM";
-export const USER_LABEL = "Signed in as Task Manager user";
-
 export const FILTERS = {
     TODAY: "today",
     ALL: "all",

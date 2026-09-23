@@ -1,5 +1,4 @@
 import { TOAST_MESSAGES } from "./config/constants.js";
-import { initAvatar } from "./components/avatar.js";
 import { initToast, showToast } from "./components/toast.js";
 import { renderDailyProgress } from "./features/dailyProgress.js";
 import { initBackToTop } from "./features/backToTop.js";
@@ -11,7 +10,7 @@ import { loadState, subscribe } from "./store/taskStore.js";
 import { qs } from "./utils/dom.js";
 
 /**
- * DOCU: Renders today's date in the redesigned header.
+ * DOCU: Renders today's date and the current local time in the header.
  * Last Updated Date: September 24, 2026
  * @function initHeaderDate
  * @returns {void} Does not return a value
@@ -21,11 +20,23 @@ function initHeaderDate() {
     const date = qs("#headerDate");
     if (!date) return;
 
-    date.textContent = new Intl.DateTimeFormat(undefined, {
+    const formatter = new Intl.DateTimeFormat(undefined, {
         weekday: "long",
         month: "long",
         day: "numeric",
-    }).format(new Date());
+        hour: "numeric",
+        minute: "2-digit",
+        second: "2-digit",
+    });
+
+    const updateDateTime = () => {
+        const now = new Date();
+        date.textContent = formatter.format(now);
+        date.dateTime = now.toISOString();
+    };
+
+    updateDateTime();
+    window.setInterval(updateDateTime, 1000);
 }
 
 /**
@@ -65,7 +76,6 @@ function renderApp() {
 function initApp() {
     try {
         initToast();
-        initAvatar();
         initHeaderDate();
         initFooterYear();
         initTaskModals();
