@@ -3,37 +3,274 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Interactive Task Manager</title>
+        <meta name="color-scheme" content="light" />
+        <meta
+            name="description"
+            content="A clean, focused task manager for adding, completing, and organizing today's work."
+        />
+        <title>Task Manager</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,500..700,50;1,9..144,500..700,50&family=Schibsted+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&display=swap"
+            rel="stylesheet"
+        />
         <link rel="stylesheet" href="./css/style.css" />
     </head>
     <body>
-        <main class="app">
-            <header class="app-header">
-                <h1>Task Manager</h1>
-                <p>Add, complete, and manage your tasks.</p>
+        <a class="skip-link" href="#taskInput">Skip to add a task</a>
+
+        <div class="page" id="appShell" data-loading>
+            <header class="site-header">
+                <div class="site-header__inner">
+                    <a class="brand" href="#tasks">
+                        <span class="brand__mark" aria-hidden="true">
+                            <svg
+                                viewBox="0 0 24 24"
+                                width="18"
+                                height="18"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2.4"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                focusable="false"
+                            >
+                                <path d="m5 12.5 4.5 4.5L19 7" />
+                            </svg>
+                        </span>
+                        <span class="brand__name">Task Manager</span>
+                    </a>
+
+                    <div class="site-header__meta">
+                        <time class="site-header__date" id="headerDate"></time>
+                        <span
+                            id="userAvatar"
+                            class="avatar"
+                            role="img"
+                            aria-label="Signed in as Task Manager user"
+                        >
+                            TM
+                        </span>
+                    </div>
+                </div>
             </header>
 
-            <form id="taskForm">
-                <label for="taskInput">Task Title</label>
-                <div class="form-row">
-                    <input
-                        id="taskInput"
-                        type="text"
-                        placeholder="Enter a task"
-                        required
-                    />
-                    <button type="submit">Add Task</button>
+            <main class="app" id="tasks">
+                <section class="panel" aria-labelledby="pageTitle">
+                    <div class="panel__hero">
+                        <div class="panel__intro">
+                            <h1 id="pageTitle" class="panel__title">Tasks</h1>
+                            <p class="panel__subtitle">Clear your head. One task at a time.</p>
+                        </div>
+                        <div class="badges">
+                            <span class="badge badge--level">
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    width="15"
+                                    height="15"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1.8"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    aria-hidden="true"
+                                    focusable="false"
+                                >
+                                    <path d="m12 4 8 4-8 4-8-4 8-4Z" />
+                                    <path d="m4 12.5 8 4 8-4" />
+                                    <path d="m4 16.5 8 4 8-4" />
+                                </svg>
+                                <span id="levelBadge">Level 1</span>
+                            </span>
+                            <span class="badge badge--xp">
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    width="15"
+                                    height="15"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1.8"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    aria-hidden="true"
+                                    focusable="false"
+                                >
+                                    <path
+                                        d="m12 3.5 2.6 5.4 5.9.9-4.3 4.2 1 5.9L12 16.9l-5.2 2.7 1-5.9-4.3-4.2 5.9-.9z"
+                                    />
+                                </svg>
+                                <span id="xpBadge">XP 0/100</span>
+                                <span
+                                    class="badge__info"
+                                    id="xpInfo"
+                                    tabindex="0"
+                                    role="img"
+                                    aria-label="You need 100 EXP to reach Level 2. Keep going!"
+                                    data-tooltip="You need 100 EXP to reach Level 2. Keep going!"
+                                >
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        width="13"
+                                        height="13"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="1.8"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        aria-hidden="true"
+                                        focusable="false"
+                                    >
+                                        <circle cx="12" cy="12" r="9" />
+                                        <path d="M9.6 9.2a2.5 2.5 0 0 1 4.8.9c0 1.7-2.4 2.2-2.4 3.6" />
+                                        <path d="M12 17h.01" />
+                                    </svg>
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                    <section class="today" aria-label="Today's progress">
+                        <div class="today__row">
+                            <span class="today__label">Today</span>
+                            <p id="dailyProgressLabel" class="today__value" aria-live="polite">
+                                No tasks yet
+                            </p>
+                        </div>
+                        <div
+                            id="dailyProgressBar"
+                            class="progress"
+                            role="progressbar"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                            aria-valuenow="0"
+                            aria-label="Daily task completion"
+                        >
+                            <span class="progress__fill"></span>
+                        </div>
+                    </section>
+                    <form id="taskForm" class="composer" novalidate>
+                        <div class="composer__row">
+                            <label class="visually-hidden" for="taskInput">Task title</label>
+                            <input
+                                id="taskInput"
+                                name="title"
+                                type="text"
+                                maxlength="120"
+                                autocomplete="off"
+                                placeholder="What needs to be done?"
+                                required
+                                aria-describedby="taskError"
+                            />
+                            <button
+                                type="submit"
+                                id="addButton"
+                                class="btn btn--primary"
+                                disabled
+                            >
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    width="18"
+                                    height="18"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    aria-hidden="true"
+                                    focusable="false"
+                                >
+                                    <path d="M12 5v14M5 12h14" />
+                                </svg>
+                                <span>Add</span>
+                            </button>
+                        </div>
+                        <p id="taskError" class="field-error" role="alert"></p>
+                    </form>
+
+                    <section class="list" aria-labelledby="listHeading">
+                        <div class="list__head">
+                            <div class="list__head-main">
+                                <h2 id="listHeading">Your list</h2>
+                                <p id="listCounts" class="list__counts">0 pending, 0 done</p>
+                            </div>
+                            <fieldset id="taskFilters" class="filters">
+                                <legend class="visually-hidden">Filter tasks</legend>
+                                <label class="filters__option">
+                                    <input type="radio" name="taskFilter" value="today" checked />
+                                    <span>Today</span>
+                                </label>
+                                <label class="filters__option">
+                                    <input type="radio" name="taskFilter" value="all" />
+                                    <span>All</span>
+                                </label>
+                            </fieldset>
+                        </div>
+
+                        <div id="loadingState" class="state">
+                            <p>Loading your tasks…</p>
+                        </div>
+
+                        <div id="emptyState" class="state state--empty" hidden>
+                            <p class="state__title">You’re all caught up.</p>
+                            <p>Add a task to get started.</p>
+                        </div>
+
+                        <ul id="taskList" class="task-list" hidden></ul>
+                    </section>
+                </section>
+            </main>
+            <footer class="site-footer">
+                <div class="site-footer__inner">
+                    <p class="site-footer__copy">
+                        © <span id="footerYear">2026</span> Task Manager. All Rights Reserved.
+                    </p>
+                </div>
+            </footer>
+        </div>
+        <dialog id="editDialog" class="dialog" aria-labelledby="editDialogTitle">
+            <form id="editForm" novalidate>
+                <h2 id="editDialogTitle">Edit task</h2>
+                <label for="editInput">Task title</label>
+                <input id="editInput" type="text" maxlength="120" required />
+                <p id="editError" class="field-error" role="alert"></p>
+                <div class="dialog__actions">
+                    <button type="button" class="btn" data-dialog-close>Cancel</button>
+                    <button type="submit" class="btn btn--primary">Save changes</button>
                 </div>
             </form>
+        </dialog>
 
-            <p id="message" aria-live="polite"></p>
+        <dialog
+            id="levelUpDialog"
+            class="dialog dialog--level"
+            aria-labelledby="levelUpTitle"
+            aria-describedby="levelUpCopy"
+        >
+            <h2 id="levelUpTitle">Level Up! 🎉</h2>
+            <p id="levelUpCopy">
+                Congratulations! You’ve reached
+                <strong>Level <span id="levelUpValue">2</span></strong>.
+                Keep up the great work!
+            </p>
+            <div class="dialog__actions">
+                <button
+                    type="button"
+                    id="levelUpContinue"
+                    class="btn btn--primary"
+                    data-dialog-close
+                >
+                    Continue
+                </button>
+            </div>
+        </dialog>
 
-            <section class="task-section">
-                <h2>My Tasks</h2>
-                <ul id="taskList"></ul>
-            </section>
-        </main>
+        <div
+            id="toastRegion"
+            class="toast-region"
+            aria-live="polite"
+            aria-relevant="additions text"
+            data-visible="false"
+        ></div>
 
-        <script src="./js/app.js"></script>
+        <script type="module" src="./js/app.js"></script>
     </body>
 </html>
