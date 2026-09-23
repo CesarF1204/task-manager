@@ -64,14 +64,14 @@ export function renderTaskList() {
         : "";
     const revived = keySelector ? list.querySelector(keySelector) : null;
     if (revived instanceof HTMLElement) {
-        revived.focus();
+        revived.focus({ preventScroll: true });
         return;
     }
 
     const rows = [...list.children];
     const fallback = rows[Math.max(0, Math.min(activeIndex, rows.length - 1))];
     const target = fallback?.querySelector("[data-action]") ?? qs("#taskInput");
-    target?.focus();
+    target?.focus({ preventScroll: true });
 }
 
 /**
@@ -175,7 +175,6 @@ function handleToggle(id) {
         if (result.leveledUp) {
             openLevelUpModal(result.nextLevel);
         }
-
         return result;
     } catch {
         showToast(TOAST_MESSAGES.ERROR, { type: "error" });
