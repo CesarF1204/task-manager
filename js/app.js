@@ -2,6 +2,7 @@ import { TOAST_MESSAGES } from "./config/constants.js";
 import { initAvatar } from "./components/avatar.js";
 import { initToast, showToast } from "./components/toast.js";
 import { renderDailyProgress } from "./features/dailyProgress.js";
+import { initBackToTop } from "./features/backToTop.js";
 import { initTaskForm } from "./features/taskForm.js";
 import { initTaskList, renderTaskList } from "./features/taskList.js";
 import { initTaskModals } from "./features/taskModals.js";
@@ -70,6 +71,7 @@ function initApp() {
         initTaskModals();
         initTaskForm();
         initTaskList();
+        initBackToTop();
         loadState();
         subscribe(renderApp);
         renderApp();

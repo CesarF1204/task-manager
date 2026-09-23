@@ -20,6 +20,8 @@
     <body>
         <a class="skip-link" href="#taskInput">Skip to add a task</a>
 
+        <div id="backToTopSentinel" class="btt-sentinel" aria-hidden="true"></div>
+
         <div class="page" id="appShell" data-loading>
             <header class="site-header">
                 <div class="site-header__inner">
@@ -262,6 +264,30 @@
                 </button>
             </div>
         </dialog>
+
+        <button
+            type="button"
+            id="backToTop"
+            class="back-to-top"
+            aria-label="Back to top"
+            aria-hidden="true"
+        >
+            <svg
+                viewBox="0 0 24 24"
+                width="20"
+                height="20"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+                focusable="false"
+            >
+                <path d="M12 19V5" />
+                <path d="m5 12 7-7 7 7" />
+            </svg>
+        </button>
 
         <div
             id="toastRegion"

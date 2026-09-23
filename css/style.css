@@ -87,6 +87,15 @@ button:disabled {
     top: 0.75rem;
 }
 
+.btt-sentinel {
+    position: absolute;
+    top: 50vh;
+    left: 0;
+    width: 1px;
+    height: 1px;
+    pointer-events: none;
+}
+
 .visually-hidden {
     position: absolute;
     width: 1px;
@@ -300,6 +309,47 @@ button:disabled {
     opacity: 1;
     visibility: visible;
     transform: none;
+}
+
+/* ---------- Back to top ---------- */
+
+.back-to-top {
+    position: fixed;
+    right: 1.1rem;
+    bottom: 1.1rem;
+    z-index: 15;
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: var(--surface);
+    color: var(--muted);
+    box-shadow: 0 8px 24px -10px rgba(33, 31, 27, 0.35);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(8px);
+    transition: opacity 200ms ease, transform 200ms ease,
+        visibility 200ms, background-color 150ms ease,
+        border-color 150ms ease, color 150ms ease;
+}
+
+.back-to-top.is-visible {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+}
+
+.back-to-top:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+}
+
+.back-to-top:active {
+    transform: translateY(1px);
 }
 
 /* ---------- Today card ---------- */

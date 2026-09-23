@@ -17,6 +17,7 @@ There is **no streak functionality**. Daily progress only counts how many of tod
 - Toast feedback for add, edit, complete, undo, delete, and errors
 - Delete undo from the toast
 - Keyboard-accessible dialogs, toasts, and task controls
+- Floating Back to Top button that appears only when the page needs scrolling
 - Responsive layout for desktop, tablet, and mobile
 
 ## XP and levels
@@ -66,6 +67,7 @@ Data is stored in `localStorage` under `task-manager-state`.
     ├── config/
     │   └── constants.js
     ├── features/
+    │   ├── backToTop.js
     │   ├── dailyProgress.js
     │   ├── taskForm.js
     │   ├── taskList.js
