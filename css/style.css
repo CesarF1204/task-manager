@@ -1119,6 +1119,24 @@ body:has(.toast-region[data-visible="true"]) .back-to-top {
         padding-top: 1.25rem;
     }
 
+    .site-header__inner {
+        flex-wrap: wrap;
+        row-gap: 0.25rem;
+    }
+
+    .brand,
+    .site-header__meta {
+        min-width: 0;
+    }
+
+    .site-header__date {
+        max-width: 100%;
+        line-height: 1.35;
+        text-align: right;
+        white-space: normal;
+        overflow-wrap: break-word;
+    }
+
     .panel {
         border-radius: 18px;
     }
@@ -1142,6 +1160,16 @@ body:has(.toast-region[data-visible="true"]) .back-to-top {
 }
 
 @media (max-width: 560px) {
+    .site-header__inner {
+        align-items: flex-start;
+    }
+
+    .site-header__meta {
+        width: 100%;
+        justify-content: flex-start;
+        margin: 0 0 6px 4px;
+    }
+
     .panel__hero {
         grid-template-columns: 1fr;
     }
