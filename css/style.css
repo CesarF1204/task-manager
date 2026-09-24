@@ -599,6 +599,44 @@ body:has(.toast-region[data-visible="true"]) .back-to-top {
     outline-offset: 2px;
 }
 
+.filters__tooltip {
+    position: relative;
+    cursor: pointer;
+}
+
+.filters__tooltip::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    top: calc(100% + 9px);
+    right: -0.5rem;
+    z-index: 20;
+    width: max-content;
+    max-width: min(14rem, calc(100vw - 3rem));
+    padding: 0.5rem 0.65rem;
+    border-radius: 8px;
+    background: var(--ink);
+    color: var(--surface);
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1.35;
+    text-align: left;
+    white-space: normal;
+    box-shadow: 0 10px 24px -12px rgba(33, 31, 27, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-4px);
+    transition: opacity 140ms ease, transform 140ms ease, visibility 140ms;
+    pointer-events: none;
+}
+
+.filters__tooltip:hover::after,
+.filters__tooltip:focus::after,
+.filters__tooltip:focus-visible::after {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+}
+
 /* ---------- States ---------- */
 
 .state {
