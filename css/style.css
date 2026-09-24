@@ -647,8 +647,7 @@ body:has(.toast-region[data-visible="true"]) .back-to-top {
     animation: row-in 200ms ease both;
 }
 
-.task-item:hover,
-.task-item:focus-within {
+.task-item:hover {
     background-color: #f3eee8;
     box-shadow: 0 6px 14px -12px rgba(33, 31, 27, 0.4);
     transform: translateY(-1px);
