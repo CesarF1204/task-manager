@@ -9,8 +9,15 @@ import {
 import { qs } from "../utils/dom.js";
 
 let editId = null;
+let initialEditTitle = "";
 let deleteId = null;
 let onDeleteConfirm = null;
+
+function syncEditSubmitState(input, saveButton) {
+    if (saveButton) {
+        saveButton.disabled = input.value === initialEditTitle;
+    }
+}
 
 /**
  * DOCU: Binds the edit, delete confirmation, and level-up dialogs.
@@ -24,6 +31,7 @@ export function initTaskModals() {
     const levelDialog = qs("#levelUpDialog");
     const editForm = qs("#editForm");
     const editInput = qs("#editInput");
+    const editSaveButton = qs('#editForm button[type="submit"]');
     const editError = qs("#editError");
     const deleteDialog = qs("#deleteDialog");
     const deleteButton = qs("#confirmDelete");
@@ -58,9 +66,16 @@ export function initTaskModals() {
         confirmDelete();
     });
 
+    editInput?.addEventListener("input", () => {
+        syncEditSubmitState(editInput, editSaveButton);
+        if (editError?.textContent) editError.textContent = "";
+        editInput.removeAttribute("aria-invalid");
+    });
+
     editForm?.addEventListener("submit", (event) => {
         event.preventDefault();
         if (!editId || !editInput) return;
+        if (editInput.value === initialEditTitle) return;
 
         const error = validateTaskTitle(editInput.value, editId);
         if (error) {
@@ -100,7 +115,9 @@ export function openEditModal(id) {
     if (!task || !dialog || !input) return;
 
     editId = task.id;
+    initialEditTitle = task.title;
     input.value = task.title;
+    syncEditSubmitState(input, qs('#editForm button[type="submit"]'));
     if (error) error.textContent = "";
     input.removeAttribute("aria-invalid");
     qs(".task-item.is-editing")?.classList.remove("is-editing");
