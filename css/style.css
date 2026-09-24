@@ -635,6 +635,11 @@ body:has(.toast-region[data-visible="true"]) .back-to-top {
     padding: 0;
 }
 
+/* Keep each task distinct without adding a trailing divider. */
+.task-item + .task-item {
+    border-top: 1px solid var(--line);
+}
+
 .task-item {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr) auto;
