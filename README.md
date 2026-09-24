@@ -10,12 +10,12 @@ There is **no streak functionality**. Daily progress only counts how many of tod
 - View today’s tasks or the full list
 - Complete, undo, edit, and delete tasks
 - Three clear row actions: complete/undo (icon reflects state), edit, and delete
-- Delete is protected by an undo toast instead of an instant, irreversible remove
+- Delete asks for confirmation before permanently removing a task
 - Daily completion summary (`7 / 9 done`)
 - Compact XP and level badges
 - Level-up dialog only when a new level is actually reached
 - Toast feedback for add, edit, complete, undo, delete, and errors
-- Delete undo from the toast
+- Confirmation dialog for destructive task deletion
 - Keyboard-accessible dialogs, toasts, and task controls
 - Floating Back to Top button that appears only when the page needs scrolling
 - Responsive layout for desktop, tablet, and mobile

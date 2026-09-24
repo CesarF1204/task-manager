@@ -331,33 +331,48 @@ button:disabled {
     width: 48px;
     height: 48px;
     padding: 0;
-    border: 1px solid var(--line);
+    border: 1px solid var(--accent);
     border-radius: 50%;
-    background: var(--surface);
-    color: var(--muted);
+    background: var(--accent);
+    color: var(--surface);
     box-shadow: 0 8px 24px -10px rgba(33, 31, 27, 0.35);
     opacity: 0;
     visibility: hidden;
+    pointer-events: none;
     transform: translateY(8px);
-    transition: opacity 200ms ease, transform 200ms ease,
-        visibility 200ms, background-color 150ms ease,
-        border-color 150ms ease, color 150ms ease;
+    transition: opacity 200ms ease, visibility 200ms ease,
+        transform 200ms ease, background-color 150ms ease,
+        box-shadow 150ms ease;
 }
 
 .back-to-top.is-visible {
     opacity: 1;
     visibility: visible;
+    pointer-events: auto;
     transform: none;
 }
 
 .back-to-top:hover {
-    background: var(--accent);
-    border-color: var(--accent);
-    color: #fff;
+    background: var(--accent-hover);
+    box-shadow: 0 10px 26px -10px rgba(33, 31, 27, 0.45);
+    transform: translateY(-2px);
+}
+
+.back-to-top:focus-visible {
+    outline-color: var(--ink);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 5px var(--accent-soft);
 }
 
 .back-to-top:active {
-    transform: translateY(1px);
+    box-shadow: 0 5px 14px -8px rgba(33, 31, 27, 0.4);
+    transform: scale(0.94);
+}
+
+body:has(.toast-region[data-visible="true"]) .back-to-top {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
 }
 
 /* ---------- Today card ---------- */
@@ -728,41 +743,114 @@ button:disabled {
 
 .task-item__actions {
     display: flex;
-    gap: 0.15rem;
+    gap: 0.2rem;
+    min-width: max-content;
 }
 
 .task-item__action {
+    position: relative;
     display: grid;
     place-items: center;
-    width: 36px;
-    height: 36px;
+    width: 44px;
+    height: 44px;
     padding: 0;
-    border: 0;
+    border: 1px solid transparent;
     border-radius: var(--radius-sm);
     background: transparent;
     color: var(--muted);
-    transition: color 150ms ease, background-color 150ms ease,
-        transform 100ms ease, opacity 150ms ease;
+    transition: color 160ms ease, background-color 160ms ease,
+        border-color 160ms ease, box-shadow 160ms ease, transform 100ms ease;
+}
+
+.task-item__action svg {
+    width: 19px;
+    height: 19px;
+    transition: transform 180ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.task-item__action::after {
+    content: "Edit task";
+    position: absolute;
+    z-index: 5;
+    top: calc(100% + 7px);
+    left: 50%;
+    padding: 0.35rem 0.5rem;
+    border-radius: 7px;
+    background: var(--ink);
+    color: var(--surface);
+    font-size: 0.72rem;
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transform: translate(-50%, -3px);
+    transition: opacity 130ms ease, transform 130ms ease;
+}
+
+.task-item__action--danger::after {
+    content: "Delete task";
 }
 
 .task-item__action:hover {
-    background: var(--bg-accent);
-    color: var(--ink);
+    border-color: var(--line);
+    background: var(--accent-soft);
+    color: var(--accent);
+    box-shadow: 0 5px 12px -8px rgba(33, 31, 27, 0.5);
+    transform: translateY(-1px);
+}
+
+.task-item__action:hover::after,
+.task-item__action:focus-visible::after {
+    opacity: 1;
+    transform: translate(-50%, 0);
+}
+
+.task-item__action:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-color: transparent;
 }
 
 .task-item__action:active {
-    transform: translateY(1px);
+    box-shadow: none;
+    transform: translateY(1px) scale(0.94);
 }
 
-.task-item__action:disabled {
+.task-item__action:hover svg {
+    transform: scale(1.08) rotate(-4deg);
+}
+
+.task-item__action:disabled,
+.task-item__action:disabled:hover {
     opacity: 0.4;
+    border-color: transparent;
     background: transparent;
+    box-shadow: none;
+    color: var(--muted);
     transform: none;
 }
 
+.task-item__action:disabled svg {
+    transform: none;
+}
+
+.task-item__action--danger {
+    color: color-mix(in srgb, var(--danger) 72%, var(--muted));
+}
+
 .task-item__action--danger:hover {
+    border-color: color-mix(in srgb, var(--danger) 22%, var(--line));
     background: var(--danger-soft);
     color: var(--danger);
+}
+
+.task-item__action--danger:focus-visible {
+    outline-color: var(--danger);
+}
+
+.task-item__action--danger:hover svg {
+    transform: translateY(-1px) rotate(-5deg);
 }
 
 /* ---------- Footer ---------- */
@@ -845,11 +933,61 @@ button:disabled {
     margin: 0;
 }
 
+.dialog__heading {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.65rem;
+}
+
+.dialog__heading h2 {
+    margin: 0;
+}
+
+.dialog__danger-icon {
+    display: grid;
+    flex: 0 0 44px;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: var(--danger-soft);
+    color: var(--danger);
+}
+
+.dialog--delete > p {
+    margin: 0;
+    color: var(--muted);
+    line-height: 1.55;
+}
+
+.btn--danger {
+    border-color: var(--danger);
+    background: var(--danger);
+    color: #fff;
+}
+
+.btn--danger:hover {
+    border-color: #8f261f;
+    background: #8f261f;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px -8px rgba(171, 52, 42, 0.8);
+}
+
+.btn--danger:focus-visible {
+    outline-color: var(--danger);
+    box-shadow: 0 0 0 3px var(--danger-soft);
+}
+
+.btn--danger:active {
+    transform: translateY(1px) scale(0.98);
+}
+
 .dialog__actions {
     display: flex;
     justify-content: flex-end;
     gap: 0.6rem;
-    margin-top: 1.1rem;
+    margin-top: 1.25rem;
 }
 
 .dialog--level .dialog__actions {
@@ -863,7 +1001,8 @@ button:disabled {
     right: 1rem;
     bottom: 1rem;
     z-index: 30;
-    width: min(22rem, calc(100% - 2rem));
+    width: max-content;
+    max-width: calc(100% - 2rem);
     pointer-events: none;
 }
 
@@ -876,6 +1015,8 @@ button:disabled {
     align-items: center;
     justify-content: space-between;
     gap: 0.75rem;
+    width: max-content;
+    max-width: 100%;
     padding: 0.85rem 0.95rem;
     border-radius: 12px;
     background: var(--ink);
@@ -894,8 +1035,10 @@ button:disabled {
 }
 
 .toast__message {
+    min-width: 0;
     margin: 0;
     font-size: 0.92rem;
+    overflow-wrap: anywhere;
 }
 
 .toast__action {
@@ -990,6 +1133,13 @@ button:disabled {
     .task-item {
         gap: 0.6rem;
         padding-inline: 0.35rem;
+        min-width: 0;
+    }
+
+    .dialog {
+        max-height: calc(100dvh - 1.5rem);
+        overflow-y: auto;
+        overscroll-behavior: contain;
     }
 }
 
@@ -1032,16 +1182,27 @@ button:disabled {
         grid-area: actions;
     }
 
-    .task-item__action {
-        width: 44px;
-        height: 44px;
+    .dialog--delete {
+        width: min(28rem, calc(100% - 1rem));
+        padding: 1.25rem 1rem 1rem;
+    }
+
+    .dialog--delete .dialog__heading {
+        align-items: flex-start;
+    }
+
+    .dialog--delete .dialog__actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .dialog--delete .dialog__actions .btn {
+        width: 100%;
+        min-height: 48px;
     }
 
     .toast-region {
-        left: 1rem;
-        right: 1rem;
-        width: auto;
-        bottom: 0.85rem;
+        max-width: calc(100% - 2rem);
     }
 }
 

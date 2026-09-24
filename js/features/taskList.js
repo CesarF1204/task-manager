@@ -4,13 +4,16 @@ import { ICONS } from "../components/icons.js";
 import {
     deleteTask,
     getVisibleTasks,
-    restoreTask,
     toggleTaskCompletion,
 } from "../services/taskService.js";
 import { createEl, qs, setHidden } from "../utils/dom.js";
 import { formatListCounts } from "../utils/format.js";
 import { getActiveFilter } from "./taskForm.js";
-import { openEditModal, openLevelUpModal } from "./taskModals.js";
+import {
+    openDeleteConfirmation,
+    openEditModal,
+    openLevelUpModal,
+} from "./taskModals.js";
 
 /**
  * DOCU: Renders the task list for the active filter, keeps row counts in sync,
@@ -93,8 +96,8 @@ function createTaskItem(task) {
         className: "task-item__toggle",
         dataset: { action: "toggle", id: task.id },
         "aria-label": task.completed
-            ? `Mark “${task.title}” incomplete`
-            : `Mark “${task.title}” complete`,
+            ? `Mark "${task.title}" incomplete`
+            : `Mark "${task.title}" complete`,
         title: task.completed ? "Undo complete" : "Mark complete",
         innerHTML: task.completed ? ICONS.checkCircle : ICONS.circle,
     });
@@ -109,16 +112,16 @@ function createTaskItem(task) {
             type: "button",
             className: "task-item__action",
             dataset: { action: "edit", id: task.id },
-            "aria-label": `Edit “${task.title}”`,
-            title: "Edit task",
+            "aria-haspopup": "dialog",
+            "aria-label": `Edit task "${task.title}"`,
             innerHTML: ICONS.edit,
         }),
         createEl("button", {
             type: "button",
             className: "task-item__action task-item__action--danger",
             dataset: { action: "delete", id: task.id },
-            "aria-label": `Delete “${task.title}”`,
-            title: "Delete task",
+            "aria-haspopup": "dialog",
+            "aria-label": `Delete task "${task.title}"`,
             innerHTML: ICONS.trash,
         }),
     ]);
@@ -145,7 +148,11 @@ export function initTaskList() {
         const { action, id } = target.dataset;
         if (action === "toggle") handleToggle(id);
         if (action === "edit") openEditModal(id);
-        if (action === "delete") handleDelete(id, target.closest(".task-item"));
+        if (action === "delete") {
+            openDeleteConfirmation(id, () =>
+                handleDelete(id, target.closest(".task-item")),
+            );
+        }
     });
 
     filters?.addEventListener("change", () => {
@@ -183,8 +190,8 @@ function handleToggle(id) {
 }
 
 /**
- * DOCU: Removes a task after a short animation, disables its controls while
- * the exit animation runs, and offers undo through the toast.
+ * DOCU: Removes a task after a short confirmation-gated animation and disables
+ * its controls while the exit animation runs.
  * Last Updated Date: September 24, 2026
  * @function handleDelete
  * @param {string} id - Task identifier
@@ -217,14 +224,7 @@ function handleDelete(id, item) {
             if (!deleted) return;
 
             focusAfterRemoval();
-            showToast(TOAST_MESSAGES.DELETE, {
-                type: "info",
-                actionLabel: "Undo",
-                onAction: () => {
-                    restoreTask(deleted);
-                    qs(`[data-action="toggle"][data-id="${deleted.id}"]`)?.focus();
-                },
-            });
+            showToast(TOAST_MESSAGES.DELETE);
         } catch {
             showToast(TOAST_MESSAGES.ERROR, { type: "error" });
         }
