@@ -637,20 +637,6 @@ body:has(.toast-region[data-visible="true"]) .back-to-top {
     transform: none;
 }
 
-@keyframes filter-tooltip-close {
-    0%,
-    75% {
-        opacity: 1;
-        visibility: visible;
-        transform: none;
-    }
-    100% {
-        opacity: 0;
-        visibility: hidden;
-        transform: translateY(-4px);
-    }
-}
-
 /* ---------- States ---------- */
 
 .state {
@@ -1272,18 +1258,6 @@ body:has(.toast-region[data-visible="true"]) .back-to-top {
         flex-direction: column;
     }
 
-    .filters__tooltip::after {
-        right: auto;
-        left: 0;
-        width: min(14rem, calc(100vw - 2.5rem));
-        box-sizing: border-box;
-        direction: ltr;
-        text-align: left;
-        text-orientation: mixed;
-        unicode-bidi: isolate;
-        writing-mode: horizontal-tb;
-    }
-
     .composer .btn--primary {
         width: 100%;
     }
@@ -1352,15 +1326,5 @@ body:has(.toast-region[data-visible="true"]) .back-to-top {
     .task-item:hover,
     .task-item:focus-within {
         transform: none;
-    }
-    .filters__tooltip:hover::after,
-    .filters__tooltip:focus::after,
-    .filters__tooltip:focus-visible::after {
-        animation: filter-tooltip-close 2s step-end forwards !important;
-    }
-
-    .load-more-state.is-loading .load-more-state__spinner {
-        animation: load-more-spin 800ms linear infinite !important;
-        animation-play-state: running !important;
     }
 }
