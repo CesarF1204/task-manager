@@ -203,29 +203,9 @@ button:disabled {
 }
 
 .panel__hero {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
+    display: flex;
+    justify-content: center;
     align-items: start;
-    gap: 1rem 1.5rem;
-}
-
-.panel__intro {
-    min-width: 0;
-}
-
-.panel__title {
-    margin: 0;
-    font-size: clamp(2.1rem, 6vw, 2.6rem);
-    font-weight: 700;
-    letter-spacing: -0.03em;
-    line-height: 1.05;
-}
-
-.panel__subtitle {
-    margin: 0.55rem 0 0;
-    font-style: italic;
-    font-size: 0.98rem;
-    color: var(--muted);
 }
 
 .badges {
@@ -1170,12 +1150,17 @@ body:has(.toast-region[data-visible="true"]) .back-to-top {
         margin: 0 0 6px 4px;
     }
 
-    .panel__hero {
-        grid-template-columns: 1fr;
+    .badges {
+        justify-content: flex-start;
+        min-width: 0;
+        padding-top: 0;
     }
 
-    .badges {
-        justify-content: flex-end;
+    .badge {
+        min-width: 0;
+        max-width: 100%;
+        white-space: normal;
+        overflow-wrap: break-word;
     }
 
     .composer__row {
