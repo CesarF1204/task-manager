@@ -679,37 +679,6 @@ body:has(.toast-region[data-visible="true"]) .back-to-top {
     display: none;
 }
 
-.load-more-state {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.55rem;
-    min-height: 3rem;
-    color: var(--muted);
-    font-size: 0.82rem;
-    animation: fade-in 180ms ease both;
-}
-
-.load-more-state__spinner {
-    display: block;
-    flex: 0 0 0.9rem;
-    width: 0.9rem;
-    height: 0.9rem;
-    box-sizing: border-box;
-    border: 2px solid var(--line-strong);
-    border-top-color: transparent;
-    border-right-color: var(--accent);
-    border-radius: 50%;
-    transform: rotate(0deg);
-    transform-origin: 50% 50%;
-    will-change: transform;
-}
-
-.load-more-state.is-loading .load-more-state__spinner {
-    animation: load-more-spin 800ms linear infinite;
-    animation-play-state: running;
-}
-
 /* ---------- Task rows ---------- */
 
 .task-list {
@@ -1129,24 +1098,6 @@ body:has(.toast-region[data-visible="true"]) .back-to-top {
 
 /* ---------- Animations ---------- */
 
-@keyframes fade-in {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
-@keyframes load-more-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
-}
-
 @keyframes row-in {
     from {
         opacity: 0;
@@ -1357,10 +1308,5 @@ body:has(.toast-region[data-visible="true"]) .back-to-top {
     .filters__tooltip:focus::after,
     .filters__tooltip:focus-visible::after {
         animation: filter-tooltip-close 2s step-end forwards !important;
-    }
-
-    .load-more-state.is-loading .load-more-state__spinner {
-        animation: load-more-spin 800ms linear infinite !important;
-        animation-play-state: running !important;
     }
 }
