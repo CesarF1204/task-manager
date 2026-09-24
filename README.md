@@ -22,7 +22,7 @@ There is **no streak functionality**. Daily progress only counts how many of tod
 
 ## XP and levels
 
-XP changes only when a task’s completion state changes:
+XP changes only when a task's completion state changes:
 
 | Action | EXP |
 | --- | --- |
@@ -31,7 +31,7 @@ XP changes only when a task’s completion state changes:
 | Delete a task | **Unchanged** |
 | Edit a task | **Unchanged** |
 
-The first level requires 100 EXP. Every level after that uses a cumulative threshold of `level × 100 + (level − 1) × 10`: Level 2 starts at 210 EXP, Level 3 at 320 EXP, Level 4 at 430 EXP, and so on without a maximum level. The badges, dedicated level progress bar, accessible progress value, and next-level tooltip are all derived from this formula and refresh immediately after completion or undo. The cumulative EXP badge shows the user's total EXP against the next level’s threshold, for example `EXP 0/100` at Level 1.
+The first level requires 100 EXP. Every level after that uses a cumulative threshold of `level × 100 + (level − 1) × 10`: Level 2 starts at 210 EXP, Level 3 at 320 EXP, Level 4 at 430 EXP, and so on without a maximum level. The badges, dedicated level progress bar, accessible progress value, and next-level tooltip are all derived from this formula and refresh immediately after completion or undo. The cumulative EXP badge shows the user's total EXP against the next level's threshold, for example `EXP 0/100` at Level 1.
 
 Refreshing, re-rendering, sorting, and filtering never award XP.
 
@@ -39,14 +39,7 @@ Refreshing, re-rendering, sorting, and filtering never award XP.
 
 This is a static front-end app. No build step or extra dependencies are required.
 
-1. Open `index.html` in a current browser, or serve the project folder with any local static server.
-2. Example:
-
-```bash
-npx serve .
-```
-
-Then visit the printed local URL.
+Use the VS Code Live Server extension and click "Go Live".
 
 Data is stored in `localStorage` under `task-manager-state`.
 
