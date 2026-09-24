@@ -60,7 +60,7 @@ export function createEl(tag, props = {}, children = []) {
 }
 
 /**
- * DOCU: Toggles an element’s hidden state using the hidden attribute.
+ * DOCU: Toggles an element's hidden state using the hidden attribute.
  * Last Updated Date: September 24, 2026
  * @function setHidden
  * @param {HTMLElement|null} element - Element to show or hide

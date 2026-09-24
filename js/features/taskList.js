@@ -131,7 +131,8 @@ function createTaskItem(task) {
 }
 
 /**
- * DOCU: Binds row actions (toggle, edit, delete) and list filters.
+ * DOCU: Binds row actions (toggle, edit, delete) and list filters. Pointer-driven
+ * completion clicks are blurred before re-render to avoid persistent mobile focus.
  * Last Updated Date: September 24, 2026
  * @function initTaskList
  * @returns {void} Does not return a value
@@ -146,7 +147,10 @@ export function initTaskList() {
         if (!target || !(target instanceof HTMLElement)) return;
 
         const { action, id } = target.dataset;
-        if (action === "toggle") handleToggle(id);
+        if (action === "toggle") {
+            if (event.detail > 0) target.blur();
+            handleToggle(id);
+        }
         if (action === "edit") openEditModal(id);
         if (action === "delete") {
             openDeleteConfirmation(id, () =>

@@ -109,8 +109,8 @@ export function openEditModal(id) {
 }
 
 /**
- * DOCU: Opens the destructive-action confirmation for a task. Cancel receives
- * initial focus and native dialog behavior keeps keyboard focus inside the modal.
+ * DOCU: Opens the destructive-action confirmation for a task. The dialog itself
+ * receives initial focus so neither action button is selected by default.
  * @function openDeleteConfirmation
  * @param {string} id - Task identifier
  * @param {Function} onConfirm - Callback invoked only after confirmation
@@ -120,12 +120,11 @@ export function openEditModal(id) {
 export function openDeleteConfirmation(id, onConfirm) {
     const task = findTaskById(id);
     const dialog = qs("#deleteDialog");
-    const cancelButton = dialog?.querySelector("[data-dialog-close]");
     if (!task || !dialog || typeof onConfirm !== "function") return;
 
     deleteId = task.id;
     onDeleteConfirm = onConfirm;
-    openDialog(dialog, cancelButton);
+    openDialog(dialog, dialog);
 }
 
 /**
