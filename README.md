@@ -1,13 +1,13 @@
 # Task Manager
 
-A lightweight productivity app for adding, completing, and organizing today’s tasks. The experience stays simple and practical, with a small XP and level system in the background.
+A lightweight productivity app for adding, completing, and organizing today's tasks. The experience stays simple and practical, with a small XP and level system in the background.
 
-There is **no streak functionality**. Daily progress only counts how many of today’s tasks are done.
+There is **no streak functionality**. Daily progress only counts how many of today's tasks are done.
 
 ## Features
 
 - Quick task creation from a single input
-- View today’s tasks or the full list
+- View today's tasks or the full list
 - Complete, undo, edit, and delete tasks
 - Three clear row actions: complete/undo (icon reflects state), edit, and delete
 - Delete asks for confirmation before permanently removing a task

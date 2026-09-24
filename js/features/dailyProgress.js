@@ -2,7 +2,7 @@ import { getTodayProgress } from "../services/taskService.js";
 import { qs } from "../utils/dom.js";
 
 /**
- * DOCU: Updates the daily completion summary for today’s tasks.
+ * DOCU: Updates the daily completion summary for today's tasks.
  * Last Updated Date: September 24, 2026
  * @function renderDailyProgress
  * @returns {void} Does not return a value

@@ -241,7 +241,7 @@ export function getVisibleTasks(filter) {
 }
 
 /**
- * DOCU: Returns today’s completed and total task counts.
+ * DOCU: Returns today's completed and total task counts.
  * Last Updated Date: September 24, 2026
  * @function getTodayProgress
  * @returns {{completed: number, total: number}} Daily completion counts

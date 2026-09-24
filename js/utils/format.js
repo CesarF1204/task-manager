@@ -1,5 +1,5 @@
 /**
- * DOCU: Returns today’s date as a YYYY-MM-DD key.
+ * DOCU: Returns today's date as a YYYY-MM-DD key.
  * Last Updated Date: September 24, 2026
  * @function getTodayKey
  * @returns {string} Local calendar date key
