@@ -1,5 +1,4 @@
 :root {
-    --font-display: "Fraunces", "Iowan Old Style", Georgia, serif;
     --font-body: "Schibsted Grotesk", "Segoe UI", sans-serif;
     --bg: #f5f2ec;
     --bg-accent: #efebe3;
@@ -561,7 +560,6 @@ body:has(.toast-region[data-visible="true"]) .back-to-top {
 
 .list__head h2 {
     margin: 0;
-    font-family: var(--font-display);
     font-size: 1.35rem;
     font-weight: 600;
     letter-spacing: -0.01em;
@@ -636,7 +634,6 @@ body:has(.toast-region[data-visible="true"]) .back-to-top {
 .state__title {
     margin-bottom: 0.3rem !important;
     color: var(--ink);
-    font-family: var(--font-display);
     font-size: 1.4rem;
     font-weight: 600;
 }
@@ -666,13 +663,15 @@ body:has(.toast-region[data-visible="true"]) .back-to-top {
     padding: 0.55rem 0.6rem;
     margin-top: 0.15rem;
     border-radius: var(--radius-sm);
-    transition: background-color 150ms ease;
+    transition: background-color 150ms ease, box-shadow 180ms ease, transform 180ms ease;
     animation: row-in 200ms ease both;
 }
 
 .task-item:hover,
 .task-item:focus-within {
-    background: var(--surface-2);
+    background-color: #f3eee8;
+    box-shadow: 0 6px 14px -12px rgba(33, 31, 27, 0.4);
+    transform: translateY(-1px);
 }
 
 .task-item.is-editing {
@@ -890,7 +889,6 @@ body:has(.toast-region[data-visible="true"]) .back-to-top {
 
 .dialog h2 {
     margin: 0 0 0.75rem;
-    font-family: var(--font-display);
     font-size: 1.4rem;
     font-weight: 600;
 }
@@ -1219,5 +1217,10 @@ body:has(.toast-region[data-visible="true"]) .back-to-top {
         animation: none !important;
         transition: none !important;
         scroll-behavior: auto !important;
+    }
+
+    .task-item:hover,
+    .task-item:focus-within {
+        transform: none;
     }
 }
