@@ -16,21 +16,38 @@ import {
     openLevelUpModal,
 } from "./taskModals.js";
 
+const TASK_PAGE_SIZE = 5;
+const LOAD_MORE_THRESHOLD_PX = 320;
+const LOAD_MORE_DELAY_MS = 2500;
+
+let visibleTaskCount = TASK_PAGE_SIZE;
+let isLoadingMore = false;
+let loadRequestId = 0;
+let scrollFrame = 0;
+
 /**
  * DOCU: Renders the task list for the active filter, keeps row counts in sync,
  * and restores keyboard focus to the equivalent row action after re-renders.
  * Last Updated Date: September 24, 2026
  * @function renderTaskList
+ * @param {{reset?: boolean}} [options] - Render options
  * @returns {void} Does not return a value
  * @author Cesar
  */
-export function renderTaskList() {
+export function renderTaskList({ reset = false } = {}) {
     const list = qs("#taskList");
     const empty = qs("#emptyState");
     const loading = qs("#loadingState");
+    const loadMoreState = qs("#loadMoreState");
     const counts = qs("#listCounts");
     if (!list) return;
 
+    if (reset) {
+        visibleTaskCount = TASK_PAGE_SIZE;
+        isLoadingMore = false;
+        loadRequestId += 1;
+        loadMoreState?.classList.remove("is-loading");
+    }
     setHidden(loading, true);
 
     const active = document.activeElement;
@@ -45,6 +62,7 @@ export function renderTaskList() {
         : -1;
 
     const tasks = getVisibleTasks(getActiveFilter());
+    visibleTaskCount = Math.min(visibleTaskCount, tasks.length);
     list.replaceChildren();
 
     const pending = tasks.filter((task) => !task.completed).length;
@@ -53,13 +71,22 @@ export function renderTaskList() {
     if (!tasks.length) {
         setHidden(list, true);
         setHidden(empty, false);
+        setHidden(loadMoreState, true);
+        loadMoreState?.classList.remove("is-loading");
         if (activeInList) qs("#taskInput")?.focus();
         return;
     }
 
     setHidden(list, false);
     setHidden(empty, true);
-    tasks.forEach((task) => list.append(createTaskItem(task)));
+    const visibleTasks = tasks.slice(0, visibleTaskCount);
+    const renderedIds = new Set();
+    visibleTasks.forEach((task) => {
+        if (renderedIds.has(task.id)) return;
+        renderedIds.add(task.id);
+        list.append(createTaskItem(task));
+    });
+    setHidden(loadMoreState, tasks.length <= visibleTasks.length);
 
     if (!activeInList) return;
 
@@ -161,9 +188,57 @@ export function initTaskList() {
     });
 
     filters?.addEventListener("change", () => {
-        renderTaskList();
+        renderTaskList({ reset: true });
         renderDailyProgress();
     });
+
+    window.addEventListener("scroll", scheduleLoadMore, { passive: true });
+    window.addEventListener("resize", scheduleLoadMore, { passive: true });
+    scheduleLoadMore();
+}
+
+/**
+ * DOCU: Requests the next task batch when the page approaches the list bottom.
+ * @returns {void} Does not return a value
+ */
+function scheduleLoadMore() {
+    if (scrollFrame) return;
+    scrollFrame = window.requestAnimationFrame(() => {
+        scrollFrame = 0;
+        loadMoreIfNeeded();
+    });
+}
+
+/**
+ * DOCU: Loads one incremental page without allowing concurrent requests.
+ * @returns {void} Does not return a value
+ */
+function loadMoreIfNeeded() {
+    const list = qs("#taskList");
+    if (!list || list.hidden || isLoadingMore) return;
+
+    const tasks = getVisibleTasks(getActiveFilter());
+    if (visibleTaskCount >= tasks.length) return;
+
+    const distanceFromBottom =
+        document.documentElement.scrollHeight - window.innerHeight - window.scrollY;
+    if (distanceFromBottom > LOAD_MORE_THRESHOLD_PX) return;
+
+    isLoadingMore = true;
+    const requestId = ++loadRequestId;
+    const loadMoreState = qs("#loadMoreState");
+    loadMoreState?.classList.add("is-loading");
+    setHidden(loadMoreState, false);
+
+    window.setTimeout(() => {
+        if (requestId !== loadRequestId) return;
+        isLoadingMore = false;
+        loadMoreState?.classList.remove("is-loading");
+        setHidden(loadMoreState, true);
+        visibleTaskCount = Math.min(visibleTaskCount + TASK_PAGE_SIZE, tasks.length);
+        renderTaskList();
+        scheduleLoadMore();
+    }, LOAD_MORE_DELAY_MS);
 }
 
 /**
