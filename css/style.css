@@ -204,11 +204,14 @@ button:disabled {
 }
 
 .panel__hero {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
     gap: 1rem 1.5rem;
-    flex-wrap: wrap;
+}
+
+.panel__intro {
+    min-width: 0;
 }
 
 .panel__title {
@@ -991,6 +994,14 @@ button:disabled {
 }
 
 @media (max-width: 560px) {
+    .panel__hero {
+        grid-template-columns: 1fr;
+    }
+
+    .badges {
+        justify-content: flex-end;
+    }
+
     .composer__row {
         flex-direction: column;
     }

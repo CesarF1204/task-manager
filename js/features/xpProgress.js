@@ -1,4 +1,3 @@
-import { XP_PER_LEVEL } from "../config/constants.js";
 import { getState } from "../store/taskStore.js";
 import { getLevelProgress } from "../services/xpService.js";
 import { qs } from "../utils/dom.js";
@@ -15,15 +14,16 @@ export function renderXpProgress() {
     const levelBadge = qs("#levelBadge");
     const xpBadge = qs("#xpBadge");
     const info = qs("#xpInfo");
-    if (!levelBadge || !xpBadge || !info) return;
+    if (!levelBadge || !xpBadge || !info) {
+        return;
+    }
 
     const progress = getLevelProgress(getState().xp);
-    const totalForNextLevel = progress.level * XP_PER_LEVEL;
     const targetLevel = progress.level + 1;
-    const message = `You need ${totalForNextLevel} EXP to reach Level ${targetLevel}. Keep going!`;
+    const message = `You need ${progress.xpForNextLevel} EXP to reach Level ${targetLevel}. Keep going!`;
 
     levelBadge.textContent = `Level ${progress.level}`;
-    xpBadge.textContent = `XP ${progress.xp}/${totalForNextLevel}`;
+    xpBadge.textContent = `EXP ${progress.xp}/${progress.xpForNextLevel}`;
     info.dataset.tooltip = message;
     info.setAttribute("aria-label", message);
 }

@@ -1,4 +1,7 @@
-import { FILTERS, TOAST_MESSAGES } from "../config/constants.js";
+import {
+    FILTERS,
+    TOAST_MESSAGES,
+} from "../config/constants.js";
 import { addTask, validateTaskTitle } from "../services/taskService.js";
 import { showToast } from "../components/toast.js";
 import { qs } from "../utils/dom.js";
@@ -50,8 +53,10 @@ export function initTaskForm() {
             input.removeAttribute("aria-invalid");
             showToast(TOAST_MESSAGES.ADD);
             input.focus();
-        } catch {
-            showToast(TOAST_MESSAGES.ERROR, { type: "error" });
+        } catch (caughtError) {
+            showToast(caughtError.message || TOAST_MESSAGES.ERROR, {
+                type: "error",
+            });
         }
     });
 }

@@ -38,7 +38,7 @@ export function initTaskModals() {
         event.preventDefault();
         if (!editId || !editInput) return;
 
-        const error = validateTaskTitle(editInput.value);
+        const error = validateTaskTitle(editInput.value, editId);
         if (error) {
             if (editError) editError.textContent = error;
             editInput.setAttribute("aria-invalid", "true");
@@ -52,8 +52,10 @@ export function initTaskModals() {
             editInput.removeAttribute("aria-invalid");
             closeDialog(editDialog);
             showToast(TOAST_MESSAGES.EDIT);
-        } catch {
-            showToast(TOAST_MESSAGES.ERROR, { type: "error" });
+        } catch (caughtError) {
+            showToast(caughtError.message || TOAST_MESSAGES.ERROR, {
+                type: "error",
+            });
         }
     });
 }

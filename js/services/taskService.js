@@ -3,10 +3,14 @@ import {
     MAX_TASK_TITLE_LENGTH,
     MIN_TASK_TITLE_LENGTH,
     VALIDATION_MESSAGES,
-    XP_PER_COMPLETION,
+    XP_UNDO_COMPLETION,
 } from "../config/constants.js";
 import { getState, setState } from "../store/taskStore.js";
-import { applyXpDelta, getLevelFromXp } from "./xpService.js";
+import {
+    applyXpDelta,
+    getLevelFromXp,
+    getRandomCompletionXp,
+} from "./xpService.js";
 import { getTodayKey, isToday, normalizeTitle } from "../utils/format.js";
 
 /**
@@ -17,7 +21,7 @@ import { getTodayKey, isToday, normalizeTitle } from "../utils/format.js";
  * @returns {string} Error message, or an empty string when valid
  * @author Cesar
  */
-export function validateTaskTitle(title) {
+export function validateTaskTitle(title, excludeTaskId = null) {
     const cleaned = normalizeTitle(title);
 
     if (!cleaned) return VALIDATION_MESSAGES.REQUIRED;
@@ -28,7 +32,30 @@ export function validateTaskTitle(title) {
         return VALIDATION_MESSAGES.TOO_LONG;
     }
 
-    return "";
+    const duplicate = getState().tasks.some(
+        (task) =>
+            String(task.id) !== String(excludeTaskId ?? "") &&
+            normalizeTitle(task.title).toLocaleLowerCase() ===
+                cleaned.toLocaleLowerCase(),
+    );
+
+    return duplicate ? VALIDATION_MESSAGES.DUPLICATE : "";
+}
+
+/**
+ * Checks a normalized title against the current task list.
+ * @param {object[]} tasks - Current tasks
+ * @param {string} title - Normalized candidate title
+ * @param {string|null} [excludeTaskId=null] - Task allowed to retain its title
+ * @returns {boolean} Whether another task already uses the title
+ */
+function hasDuplicateTaskTitle(tasks, title, excludeTaskId = null) {
+    const normalizedTitle = title.toLocaleLowerCase();
+    return tasks.some(
+        (task) =>
+            String(task.id) !== String(excludeTaskId ?? "") &&
+            normalizeTitle(task.title).toLocaleLowerCase() === normalizedTitle,
+    );
 }
 
 /**
@@ -67,14 +94,22 @@ function createTaskId() {
  * @author Cesar
  */
 export function addTask(title) {
+    const cleanedTitle = normalizeTitle(title);
+    const validationError = validateTaskTitle(cleanedTitle);
+    if (validationError) throw new Error(validationError);
+
     const task = {
         id: createTaskId(),
-        title: normalizeTitle(title),
+        title: cleanedTitle,
         completed: false,
         createdAt: getTodayKey(),
     };
 
     const { tasks, xp } = getState();
+    if (hasDuplicateTaskTitle(tasks, cleanedTitle)) {
+        throw new Error(VALIDATION_MESSAGES.DUPLICATE);
+    }
+
     setState({ tasks: [task, ...tasks], xp });
     return task;
 }
@@ -90,15 +125,24 @@ export function addTask(title) {
  */
 export function updateTaskTitle(id, title) {
     const { tasks, xp } = getState();
-    let updated = null;
+    const current = tasks.find((task) => task.id === String(id));
+    if (!current) return null;
 
+    const cleanedTitle = normalizeTitle(title);
+    const validationError = validateTaskTitle(cleanedTitle, id);
+    if (validationError) throw new Error(validationError);
+
+    let updated = null;
     const nextTasks = tasks.map((task) => {
         if (task.id !== String(id)) return task;
-        updated = { ...task, title: normalizeTitle(title) };
+        updated = { ...task, title: cleanedTitle };
         return updated;
     });
 
-    if (!updated) return null;
+    if (!updated || hasDuplicateTaskTitle(tasks, cleanedTitle, id)) {
+        throw new Error(VALIDATION_MESSAGES.DUPLICATE);
+    }
+
     setState({ tasks: nextTasks, xp });
     return updated;
 }
@@ -156,7 +200,9 @@ export function toggleTaskCompletion(id) {
     if (!current) return null;
 
     const completed = !current.completed;
-    const xpDelta = completed ? XP_PER_COMPLETION : -XP_PER_COMPLETION;
+    const xpDelta = completed
+        ? getRandomCompletionXp()
+        : -XP_UNDO_COMPLETION;
     const previousLevel = getLevelFromXp(xp);
     const nextXp = applyXpDelta(xp, xpDelta);
     const nextLevel = getLevelFromXp(nextXp);

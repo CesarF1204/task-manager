@@ -168,8 +168,8 @@ function handleToggle(id) {
 
         showToast(
             result.task.completed
-                ? TOAST_MESSAGES.COMPLETE
-                : TOAST_MESSAGES.UNDO_COMPLETE,
+                ? TOAST_MESSAGES.COMPLETE(result.xpDelta)
+                : TOAST_MESSAGES.UNDO_COMPLETE(Math.abs(result.xpDelta)),
         );
 
         if (result.leveledUp) {

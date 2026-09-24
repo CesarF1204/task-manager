@@ -24,14 +24,14 @@ There is **no streak functionality**. Daily progress only counts how many of tod
 
 XP changes only when a task’s completion state changes:
 
-| Action | XP |
+| Action | EXP |
 | --- | --- |
-| Incomplete → Completed | **+10 XP** |
-| Completed → Incomplete | **−10 XP** |
+| Incomplete → Completed | **Randomly +1–10 EXP** |
+| Completed → Incomplete | **Always −10 EXP** |
 | Delete a task | **Unchanged** |
 | Edit a task | **Unchanged** |
 
-Levels use a predictable 100 XP per level. The `XP` badge shows cumulative EXP against the total needed for the next level, for example `XP 0/100` at Level 1 and `XP 100/200` at Level 2, next to a compact `Level` badge. A question-mark icon on the badge reveals a tooltip naming the target level and its total EXP requirement (for example, `You need 200 EXP to reach Level 3.`); the message is calculated from the level progression system and updates automatically on every level-up, on hover or keyboard focus.
+The first level requires 100 EXP. Every level after that uses a cumulative threshold of `level × 100 + (level − 1) × 10`: Level 2 starts at 210 EXP, Level 3 at 320 EXP, Level 4 at 430 EXP, and so on without a maximum level. The badges, dedicated level progress bar, accessible progress value, and next-level tooltip are all derived from this formula and refresh immediately after completion or undo. The cumulative EXP badge shows the user's total EXP against the next level’s threshold, for example `EXP 0/100` at Level 1.
 
 Refreshing, re-rendering, sorting, and filtering never award XP.
 
