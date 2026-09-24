@@ -8,6 +8,7 @@ import {
 } from "../services/taskService.js";
 import { createEl, qs, setHidden } from "../utils/dom.js";
 import { formatListCounts } from "../utils/format.js";
+import { renderDailyProgress } from "./dailyProgress.js";
 import { getActiveFilter } from "./taskForm.js";
 import {
     openDeleteConfirmation,
@@ -161,6 +162,7 @@ export function initTaskList() {
 
     filters?.addEventListener("change", () => {
         renderTaskList();
+        renderDailyProgress();
     });
 }
 

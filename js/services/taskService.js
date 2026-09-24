@@ -241,17 +241,18 @@ export function getVisibleTasks(filter) {
 }
 
 /**
- * DOCU: Returns today's completed and total task counts.
+ * DOCU: Returns completed and total task counts for the active list filter.
  * Last Updated Date: September 24, 2026
- * @function getTodayProgress
- * @returns {{completed: number, total: number}} Daily completion counts
+ * @function getTaskProgress
+ * @param {string} filter - Active list filter
+ * @returns {{completed: number, total: number}} Completion counts
  * @author Cesar
  */
-export function getTodayProgress() {
-    const todaysTasks = getState().tasks.filter((task) => isToday(task.createdAt));
+export function getTaskProgress(filter) {
+    const tasks = getVisibleTasks(filter);
 
     return {
-        completed: todaysTasks.filter((task) => task.completed).length,
-        total: todaysTasks.length,
+        completed: tasks.filter((task) => task.completed).length,
+        total: tasks.length,
     };
 }
